@@ -23,7 +23,7 @@ var Engine = function(boardSize, lightSquare, darkSquare, selectColor) {
   \****************************/
   
   // chess engine version
-  const version = '1.0';
+  const version = '1.2.dev.1';
 
   // sides to move  
   const white = 0;
@@ -1276,7 +1276,10 @@ var Engine = function(boardSize, lightSquare, darkSquare, selectColor) {
     pvLength[searchPly] = searchPly;
     nodes++;
     
-    if((nodes & 2047 ) == 0) checkTime();
+    if ((nodes & 2047) == 0) {
+      checkTime();
+      if (timing.stopped) return 0;
+    }
     if (searchPly > maxPly - 1) return evaluate();
 
     let evaluation = evaluate();
@@ -1319,7 +1322,10 @@ var Engine = function(boardSize, lightSquare, darkSquare, selectColor) {
     let pvNode = beta - alpha > 1;
     let futilityPruning = 0;
 
-    if ((nodes & 2047) == 0) checkTime();
+    if ((nodes & 2047) == 0) {
+      checkTime();
+      if (timing.stopped) return 0;
+    }
     if ((searchPly && isRepetition()) || fifty >= 100) return 0;
     if (depth == 0) { nodes++; return quiescence(alpha, beta); }
     
